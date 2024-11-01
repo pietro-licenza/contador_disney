@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contagem para Disney World!</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            color: #333;
+            background-color: #f0f2f5;
+            background-image: url('https://www.example.com/disney-background.jpg'); /* Exemplo de URL para fundo temático */
+            background-size: cover;
+            background-attachment: fixed;
+            padding: 0 20px;
+        }
+        h1 {
+            font-family: 'Pacifico', cursive;
+            font-weight: 600;
+            font-size: 3em;
+            color: #FF5733;
+            margin-bottom: 30px;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+        }
+        .dates {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px auto;
+            font-weight: 400;
+            font-size: 1.2em;
+            color: #333;
+            max-width: 600px;
+        }
+        .date-box {
+            background-color: #fcd34d;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            font-weight: 600;
+        }
+        .progress-container {
+            width: 80%;
+            background-color: #FFE4B5;
+            border-radius: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 30px auto;
+            overflow: hidden;
+            position: relative;
+            max-width: 800px;
+        }
+        .progress-bar {
+            height: 40px;
+            border-radius: 20px;
+            background: linear-gradient(90deg, #ff6b6b, #ffd93d);
+            background-size: 200% 100%;
+            width: 0;
+            text-align: center;
+            color: white;
+            font-weight: 600;
+            line-height: 40px;
+            animation: fillProgress 2s ease-in-out forwards, wave 4s linear infinite;
+        }
+        @keyframes fillProgress {
+            0% { width: 0; }
+            100% { width: var(--progress-width); }
+        }
+        @keyframes wave {
+            0% { background-position: 0% 0; }
+            100% { background-position: 200% 0; }
+        }
+        .progress-text {
+            font-weight: 500;
+            font-size: 1.3em;
+            color: #444;
+            margin-top: 20px;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        .time-counter {
+            margin-top: 20px;
+            font-size: 1.5em;
+            font-weight: 600;
+            color: #333;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        .image-container {
+            margin-top: 20px;
+        }
+        .image-container img {
+            width: 300px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <h1>Contagem Regressiva para Disney World!</h1>
+
+    <div class="dates">
+        <div class="date-box">
+            <strong>Data de Início:</strong> <span id="start-date"></span>
+        </div>
+        <div class="date-box">
+            <strong>Data de Fim:</strong> 22/04/2026
+        </div>
+    </div>
+
+    <div class="progress-container">
+        <div class="progress-bar" id="progress-bar">0%</div>
+    </div>
+    <p class="progress-text" id="progress-text"></p>
+
+    <div class="time-counter" id="time-counter">
+        Tempo Restante: <span id="time-remaining">Calculando...</span>
+    </div>
+
+    <div class="image-container">
+        <img src="bispo_disney.webp" alt="Imagem do Bispo da Disney">
+    </div>
+
+    <script>
+        const startDate = new Date('2024-10-05');
+        document.getElementById('start-date').innerText = startDate.toLocaleDateString('pt-BR');
+
+        const targetDate = new Date('2026-04-22');
+
+        function updateProgress() {
+            const today = new Date();
+            const totalDays = Math.ceil((targetDate - startDate) / (1000 * 60 * 60 * 24));
+            const elapsedDays = Math.ceil((today - startDate) / (1000 * 60 * 60 * 24));
+            const progress = Math.min(100, (elapsedDays / totalDays) * 100);
+            const progressBar = document.getElementById('progress-bar');
+            const progressText = document.getElementById('progress-text');
+            progressBar.style.setProperty('--progress-width', progress + '%');
+            progressBar.innerText = Math.floor(progress) + '%';
+            progressText.innerText = `Dias passados: ${elapsedDays} de ${totalDays}`;
+        }
+
+        function updateTimeRemaining() {
+            const now = new Date();
+            let diff = targetDate - now;
+
+            const months = Math.floor(diff / (1000 * 60 * 60 * 24 * 30.44));
+            diff %= (1000 * 60 * 60 * 24 * 30.44);
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            diff %= (1000 * 60 * 60 * 24);
+
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            diff %= (1000 * 60 * 60);
+
+            const minutes = Math.floor(diff / (1000 * 60));
+            diff %= (1000 * 60);
+
+            const seconds = Math.floor(diff / 1000);
+
+            document.getElementById('time-remaining').innerHTML = 
+                `${months} meses <br> ${days} dias <br> ${hours} horas <br> ${minutes} minutos <br> ${seconds} segundos`;
+        }
+
+        updateProgress();
+        updateTimeRemaining();
+        setInterval(() => {
+            updateProgress();
+            updateTimeRemaining();
+        }, 1000);
+    </script>
+</body>
+</html>
